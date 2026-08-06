@@ -1,0 +1,217 @@
+Especificação Técnica e Guia de Desenvolvimento: BotZapBR / J.A.R.V.I.S
+
+Este documento detalha a arquitetura, stack tecnológica, guias de
+design, prompts de engenharia e instruções completas para que
+plataformas de IA (como Lovable, Cursor, v0 ou agentes autônomos) possam
+construir e implantar a aplicação BotZapBR / J.A.R.V.I.S com fidelidade
+visual e funcional absoluta baseada no design cyberpunk/sci-fi
+apresentado na identidade visual da marca.
+
+1. Visão Geral do Projeto
+
+O BotZapBR / J.A.R.V.I.S é uma plataforma de automação inteligente e
+assistente virtual para Windows que combina inteligência artificial
+avançada, automação de WhatsApp e controle de sistema com uma interface
+altamente imersiva inspirada no HUD do J.A.R.V.I.S (estética sci-fi com
+tons de ciano/neon, radar central escuro, painéis de telemetria em tempo
+real e comandos por voz/texto).
+
+Componentes Principais
+
+1.  Landing Page de Alta Conversão: Focada em vendas, com seções de
+    apresentação de recursos, depoimentos, selos de segurança e o botão
+    "Teste Grátis" conectado ao ecossistema.
+
+2.  Dashboard do Sistema (J.A.R.V.I.S HUD): Painel interativo estilo
+    desktop/web app contendo:
+
+    -   Monitoramento de telemetria em tempo real (CPU, RAM, GPU,
+        Temperatura, Latência).
+
+    -   Console de logs de atividades ("Sistema Ativo", "Saudação
+        inicial enviada", "Microfone silenciado").
+
+    -   Radar e visualizador central interativo com animação sci-fi.
+
+    -   Painel de comandos rápidos (Despertar (ESC), Acessar Modos,
+        Conectar WhatsApp, Controle Remoto).
+
+3.  Módulo de Automação de WhatsApp (BotZapBR): Conexão via QR Code,
+    disparo de campanhas, automação de atendimento e integração via
+    Webhooks/N8N.
+
+2. Stack Tecnológica Recomendada
+
+Para garantir máxima performance, escalabilidade e facilidade de
+integração com as ferramentas preferenciais do ecossistema moderno,
+recomenda-se a seguinte stack:
+
+  -----------------------------------------------------------------------
+  Camada                  Tecnologia              Propósito
+  ----------------------- ----------------------- -----------------------
+  Front-End & UI          React 19 + TypeScript + Construção de
+                          Tailwind CSS v4         componentes reativos
+                                                  com design system
+                                                  cyberpunk customizado
+
+  Biblioteca de UI /      Shadcn/UI + Lucide      Animações fluidas,
+  Componentes             Icons + Framer Motion   efeitos de radar e
+                                                  ícones futuristas
+
+  Plataforma de           Lovable / v0 (Opcional) Geração rápida e
+  Desenvolvimento Visual                          refinamento iterativo
+                                                  da interface
+
+  Back-End & Banco de     Supabase (PostgreSQL +  Autenticação de
+  Dados                   Auth + Edge Functions)  usuários, gerenciamento
+                                                  de planos e banco de
+                                                  dados relacional
+
+  Automação & Integração  N8N / Webhooks          Orquestração de fluxos
+                                                  de mensagens do
+                                                  WhatsApp e automações
+                                                  de atendimento
+
+  Pagamentos              Stripe                  Processamento de
+                                                  assinaturas e testes
+                                                  grátis
+
+  Controle de Versão &    GitHub + Vercel         Repositório de código e
+  Hospedagem                                      deploy contínuo em
+                                                  produção
+  -----------------------------------------------------------------------
+
+3. Diretrizes de Design & Identidade Visual (Cyberpunk / Sci-Fi)
+
+Para atingir o visual idêntico ao apresentado na referência visual
+(botzapbr.site / J.A.R.V.I.S Windows App):
+
+-   Paleta de Cores:
+
+    -   Fundo principal: Preto absoluto (#050811 / bg-slate-950) com
+        gradientes em azul profundo e ciano escuro.
+
+    -   Cor primária de destaque (Neon): Ciano brilhante (#00f0ff /
+        text-cyan-400 / border-cyan-500/50).
+
+    -   Cor de alerta/destaque secundária: Vermelho holográfico (#ff3333
+        para o radar central e botões de comando crítico).
+
+    -   Texto: Branco puro (#ffffff) para títulos e cinza claro
+        (#94a3b8) para metadados e status.
+
+-   Tipografia: Fontes monoespaçadas (JetBrains Mono ou Fira Code) para
+    os logs de terminal e fontes sans-serif geométricas (Inter /
+    Montserrat) para títulos e botões de alta conversão.
+
+-   Efeitos Visuais:
+
+    -   Bordas com efeito glow (shadow-[0_0_20px_rgba(0,240,255,0.3)]).
+
+    -   Painéis translúcidos com efeito de vidro defasado
+        (backdrop-blur-md bg-black/60 border border-cyan-500/30).
+
+4. Prompt Mestre para Geração por IA (Copie e Cole)
+
+Utilize o prompt abaixo em ferramentas de IA generativa de código (como
+Lovable, Cursor ou v0) para construir o projeto completo:
+
+  Atue como um Arquiteto de Software Sênior e UI/UX Designer
+  Especializado em Interfaces Sci-Fi e SaaS. Desenvolva uma aplicação
+  web Full-Stack completa chamada "BotZapBR / J.A.R.V.I.S", dividida em
+  duas partes principais acessíveis por navegação fluida:
+
+  1. LANDING PAGE DE ALTA CONVERSÃO (botzapbr.site):
+
+  - Header com logo futurista do CyberBot, navegação (Início, Recursos,
+  Preços, WhatsApp Bot) e botão de login / "Teste Grátis".
+
+  - Hero Section com tipografia impactante ("J.A.R.V.I.S - Assistente
+  Inteligente para Windows" e "BotZapBR - Automação Inteligente para
+  WhatsApp"), badges de destaque ("Inteligência Artificial", "Automação
+  Avançada", "Controle Total do Seu Sistema"), e mockup visual imersivo
+  simulando a interface do app Windows.
+
+  - Seção de diferenciais: Automação Inteligente, Desempenho Máximo,
+  Segurança Avançada, 100% Compatível com Windows.
+
+  - Seção de Planos e Preços com integração Stripe simulada para teste
+  grátis e conversão.
+
+  - Rodapé profissional com links de termos de uso, política de
+  privacidade e copyright.
+
+  2. PAINEL DE CONTROLE / DASHBOARD DO J.A.R.V.I.S (Simulador de App
+  Windows):
+
+  - Layout estilo desktop/janela flutuante cyberpunk com barra de título
+  J.A.R.V.I.S, minimizadores e relógio em tempo real.
+
+  - Painel esquerdo de Telemetria: Monitoramento dinâmico de CPU (ex:
+  24%), RAM (ex: 205MB/s), GPU, Temperatura e status de conexão.
+
+  - Painel Central: Um radar holográfico interativo com animação de
+  pulso em tons de ciano e vermelho, simulação de visão cibernética e
+  status de áudio ("Microfone Silenciado" / "Ativo").
+
+  - Painel Direito de Logs de Atividades estilo terminal sci-fi: ex:
+  "SYS: J.A.R.V.I.S ativo.", "Jarvis: Às ordens, Chefe! 02:27 por voz,
+  tô pronto pra te ajudar."
+
+  - Painel Inferior de Comandos: Caixa de input "Digite um comando ou
+  pergunta...", botões de ação rápida estilizados em vermelho e ciano
+  ("Despertar (ESC)", "Acessar Modo", "Conectar WhatsApp", "Controle
+  Remoto").
+
+  - Módulo de Conexão WhatsApp (BotZapBR): Tela para geração simulada de
+  QR Code, status de conexão em tempo real, disparo de mensagens
+  automáticas e integração com N8N/Webhooks.
+
+  REQUISITOS TÉCNICOS:
+
+  - Stack: React, TypeScript, Tailwind CSS, Lucide React, Framer Motion
+  para animações suaves.
+
+  - Design: Estética cyberpunk com fundo escuro profundo, bordas em neon
+  ciano e vermelho holográfico, efeitos de brilho (glow), fontes
+  monoespaçadas para logs e perfeita responsividade mobile/desktop.
+
+  - Código limpo, componentizado e pronto para produção.
+
+5. Instruções de Configuração e Implantação
+
+Para configurar o projeto em ambiente de produção utilizando as
+ferramentas preferenciais:
+
+4.  Repositório GitHub:
+
+    -   Crie um repositório no GitHub para versionamento do código
+        gerado.
+
+5.  Banco de Dados & Autenticação (Supabase):
+
+    -   Configure tabelas para usuários, leads de teste grátis e logs de
+        automação.
+
+6.  Automação (N8N):
+
+    -   Conecte os webhooks do formulário da landing page e do painel do
+        WhatsApp a instâncias do N8N para disparar notificações e
+        gerenciar fluxos de atendimento.
+
+7.  Pagamentos (Stripe):
+
+    -   Integre as chaves de API do Stripe para gerenciar o checkout de
+        assinaturas do BotZapBR.
+
+8.  Deploy (Vercel):
+
+    -   Conecte o repositório GitHub à Vercel para publicação
+        instantânea e contínua do site.
+
+6. Considerações Finais
+
+Este arquivo Markdown serve como contrato completo de engenharia.
+Qualquer agente de IA ou desenvolvedor que leia este documento terá o
+contexto exato de design, arquitetura, stack e prompts necessários para
+materializar o BotZapBR / J.A.R.V.I.S exatamente conforme a sua visão.
