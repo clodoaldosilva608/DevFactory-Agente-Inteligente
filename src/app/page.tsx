@@ -1,3 +1,5 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { CyberBackground } from "@/components/jarvis/cyber-background";
 import { SiteHeader } from "@/components/jarvis/site-header";
 import { HeroSection } from "@/components/jarvis/hero-section";
@@ -7,13 +9,15 @@ import { WhatsAppSection } from "@/components/jarvis/whatsapp-section";
 import { PricingSection } from "@/components/jarvis/pricing-section";
 import { Footer } from "@/components/jarvis/footer";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+
   return (
     <div className="relative min-h-screen flex flex-col bg-[#050811] text-foreground overflow-x-hidden">
       <CyberBackground />
 
       <div className="relative z-10 flex flex-col flex-1">
-        <SiteHeader />
+        <SiteHeader isAuthenticated={!!session} />
 
         <main className="flex-1">
           <HeroSection />

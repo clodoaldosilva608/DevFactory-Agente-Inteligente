@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Orbitron } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { Toaster as SonnerToaster } from "@/components/ui/sonner";
+import { Providers } from "@/components/providers";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -56,9 +58,25 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jetbrains.variable} ${orbitron.variable} antialiased`}
       >
-        {children}
-        <Toaster />
+        <Providers>
+          {children}
+          <Toaster />
+          <SonnerToaster
+            position="top-right"
+            theme="dark"
+            toastOptions={{
+              style: {
+                background: "rgba(5, 8, 17, 0.95)",
+                border: "1px solid rgba(0, 240, 255, 0.3)",
+                color: "#e6f7ff",
+                fontFamily: "var(--font-jetbrains), monospace",
+                fontSize: "12px",
+              },
+            }}
+          />
+        </Providers>
       </body>
     </html>
   );
 }
+

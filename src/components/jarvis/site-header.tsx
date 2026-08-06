@@ -13,7 +13,7 @@ const navLinks = [
   { label: "Planos", href: "#planos" },
 ];
 
-export function SiteHeader() {
+export function SiteHeader({ isAuthenticated = false }: { isAuthenticated?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -69,22 +69,51 @@ export function SiteHeader() {
 
           {/* CTA buttons */}
           <div className="hidden md:flex items-center gap-2">
-            <Button
-              variant="ghost"
-              className="text-slate-300 hover:text-cyan-400 hover:bg-cyan-500/10 font-mono-cyber text-xs uppercase tracking-wider"
-            >
-              <Terminal className="h-3.5 w-3.5 mr-1.5" />
-              Login
-            </Button>
-            <Button
-              asChild
-              className="bg-cyan-500/10 border border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-black font-mono-cyber text-xs uppercase tracking-wider clip-cyber-sm glow-cyan-sm hover:glow-cyan transition-all"
-            >
-              <a href="#planos">
-                <Zap className="h-3.5 w-3.5 mr-1.5" fill="currentColor" />
-                Teste Grátis
-              </a>
-            </Button>
+            {isAuthenticated ? (
+              <>
+                <Button
+                  asChild
+                  variant="ghost"
+                  className="text-slate-300 hover:text-cyan-400 hover:bg-cyan-500/10 font-mono-cyber text-xs uppercase tracking-wider"
+                >
+                  <a href="/dashboard">
+                    <Terminal className="h-3.5 w-3.5 mr-1.5" />
+                    Dashboard
+                  </a>
+                </Button>
+                <Button
+                  asChild
+                  className="bg-cyan-500/10 border border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-black font-mono-cyber text-xs uppercase tracking-wider clip-cyber-sm glow-cyan-sm hover:glow-cyan transition-all"
+                >
+                  <a href="/dashboard">
+                    <Zap className="h-3.5 w-3.5 mr-1.5" fill="currentColor" />
+                    Abrir Sistema
+                  </a>
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  asChild
+                  variant="ghost"
+                  className="text-slate-300 hover:text-cyan-400 hover:bg-cyan-500/10 font-mono-cyber text-xs uppercase tracking-wider"
+                >
+                  <a href="/login">
+                    <Terminal className="h-3.5 w-3.5 mr-1.5" />
+                    Login
+                  </a>
+                </Button>
+                <Button
+                  asChild
+                  className="bg-cyan-500/10 border border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-black font-mono-cyber text-xs uppercase tracking-wider clip-cyber-sm glow-cyan-sm hover:glow-cyan transition-all"
+                >
+                  <a href="/register">
+                    <Zap className="h-3.5 w-3.5 mr-1.5" fill="currentColor" />
+                    Teste Grátis
+                  </a>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile toggle */}
@@ -118,15 +147,33 @@ export function SiteHeader() {
                   </a>
                 ))}
                 <div className="px-4 pt-2 flex flex-col gap-2">
-                  <Button
-                    variant="ghost"
-                    className="justify-start text-slate-300 font-mono-cyber text-xs uppercase tracking-wider"
-                  >
-                    Login
-                  </Button>
-                  <Button className="bg-cyan-500/10 border border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-black font-mono-cyber text-xs uppercase tracking-wider clip-cyber-sm">
-                    Teste Grátis
-                  </Button>
+                  {isAuthenticated ? (
+                    <Button
+                      asChild
+                      className="bg-cyan-500/10 border border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-black font-mono-cyber text-xs uppercase tracking-wider clip-cyber-sm"
+                    >
+                      <a href="/dashboard">
+                        <Zap className="h-3.5 w-3.5 mr-1.5" fill="currentColor" />
+                        Abrir Sistema
+                      </a>
+                    </Button>
+                  ) : (
+                    <>
+                      <Button
+                        asChild
+                        variant="ghost"
+                        className="justify-start text-slate-300 font-mono-cyber text-xs uppercase tracking-wider"
+                      >
+                        <a href="/login">Login</a>
+                      </Button>
+                      <Button
+                        asChild
+                        className="bg-cyan-500/10 border border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-black font-mono-cyber text-xs uppercase tracking-wider clip-cyber-sm"
+                      >
+                        <a href="/register">Teste Grátis</a>
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </motion.nav>

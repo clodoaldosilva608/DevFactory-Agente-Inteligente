@@ -1,8 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// BotZapBR / J.A.R.V.I.S — Multi-tenant SaaS Schema
+// SQLite for dev, migrate to Postgres (Supabase) for production
 
 generator client {
   provider = "prisma-client-js"
@@ -13,20 +10,533 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ============================================================
+// AUTH & USERS
+// ============================================================
+
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String    @id @default(cuid())
+  email           String    @unique
+  emailVerified   DateTime?
+  name            String?
+  image           String?
+  phone           String?   @unique
+  phoneVerified   DateTime?
+  passwordHash    String?
+  twoFactorSecret String?
+  twoFactorEnabled Boolean  @default(false)
+
+  // Relations
+  account         Account[]
+  session         Session[]
+  memberships     Membership[]
+  ownedOrgs       Organization[]   @relation("OrgOwner")
+  commandLogs     CommandLog[]
+  refreshTokens   RefreshToken[]
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([email])
 }
 
-model Post {
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model RefreshToken {
   id        String   @id @default(cuid())
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  userAgent String?
+  ip        String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ============================================================
+// ORGANIZATIONS (Multi-tenant)
+// ============================================================
+
+model Organization {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  ownerId     String
+  plan        Plan     @default(FREE)
+  status      OrgStatus @default(ACTIVE)
+  trialEndsAt DateTime?
+
+  owner       User            @relation("OrgOwner", fields: [ownerId], references: [id])
+  members     Membership[]
+  whatsappSessions WhatsAppSession[]
+  campaigns   Campaign[]
+  contacts    Contact[]
+  devices     Device[]
+  licenseKeys LicenseKey[]
+  subscriptions  Subscription[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([ownerId])
+}
+
+model Membership {
+  id       String     @id @default(cuid())
+  userId   String
+  orgId    String
+  role     MemberRole @default(MEMBER)
+  invitedAt DateTime  @default(now())
+  joinedAt DateTime?
+
+  user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  org      Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, orgId])
+  @@index([orgId])
+}
+
+enum MemberRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+enum OrgStatus {
+  ACTIVE
+  SUSPENDED
+  CANCELED
+  TRIALING
+}
+
+enum Plan {
+  FREE
+  STARTER
+  PRO
+  ENTERPRISE
+}
+
+// ============================================================
+// BILLING & SUBSCRIPTIONS
+// ============================================================
+
+model Subscription {
+  id                  String             @id @default(cuid())
+  orgId               String             @unique
+  plan                Plan               @default(FREE)
+  status              SubscriptionStatus @default(TRIALING)
+  billingCycle        BillingCycle       @default(MONTHLY)
+  stripeCustomerId    String?
+  stripeSubId         String?
+  stripePriceId       String?
+  currentPeriodStart  DateTime?
+  currentPeriodEnd    DateTime?
+  canceledAt          DateTime?
+  trialEndsAt         DateTime?
+  amount              Int                @default(0) // in cents
+  currency            String             @default("BRL")
+  paymentMethod       PaymentMethod      @default(CARD)
+
+  org                 Organization       @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  invoices            Invoice[]
+
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  @@index([stripeCustomerId])
+}
+
+model Invoice {
+  id             String   @id @default(cuid())
+  subscriptionId String
+  number         String   @unique
+  amount         Int
+  currency       String   @default("BRL")
+  status         InvoiceStatus @default(PENDING)
+  pdfUrl         String?
+  hostedUrl      String?
+  paidAt         DateTime?
+  dueAt          DateTime?
+  metadata       String? // JSON string
+
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([subscriptionId])
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  UNPAID
+  INCOMPLETE
+}
+
+enum BillingCycle {
+  MONTHLY
+  YEARLY
+}
+
+enum PaymentMethod {
+  CARD
+  PIX
+  BOLETO
+  MANUAL
+}
+
+enum InvoiceStatus {
+  DRAFT
+  PENDING
+  PAID
+  UNPAID
+  VOID
+}
+
+// ============================================================
+// WHATSAPP AUTOMATION
+// ============================================================
+
+model WhatsAppSession {
+  id              String             @id @default(cuid())
+  orgId           String
+  phoneNumber     String?
+  sessionName     String
+  status          WhatsAppStatus     @default(DISCONNECTED)
+  qrCode          String?
+  qrExpiresAt     DateTime?
+  connectedAt     DateTime?
+  disconnectedAt  DateTime?
+  lastSeenAt      DateTime?
+  metadata        String? // JSON: battery, platform, etc.
+
+  // analytics
+  messagesSent    Int                @default(0)
+  messagesReceived Int               @default(0)
+  contactsCount   Int                @default(0)
+
+  org             Organization       @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  messages        Message[]
+
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  @@unique([orgId, sessionName])
+  @@index([phoneNumber])
+  @@index([status])
+}
+
+model Campaign {
+  id          String          @id @default(cuid())
+  orgId       String
+  name        String
+  description String?
+  status      CampaignStatus  @default(DRAFT)
+  type        CampaignType    @default(BROADCAST)
+
+  // scheduling
+  scheduledAt DateTime?
+  startedAt   DateTime?
+  completedAt DateTime?
+
+  // targeting
+  filterTags  String? // JSON array
+  filterLabel String?
+  recipientCount Int   @default(0)
+
+  // message content
+  messageTemplate String?
+  mediaUrl        String?
+  mediaType       String?
+  variables       String? // JSON
+
+  // stats
+  sentCount       Int     @default(0)
+  deliveredCount  Int     @default(0)
+  readCount       Int     @default(0)
+  failedCount     Int     @default(0)
+  repliedCount    Int     @default(0)
+
+  org         Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  messages    Message[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([orgId, status])
+  @@index([scheduledAt])
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  RUNNING
+  PAUSED
+  COMPLETED
+  CANCELED
+  FAILED
+}
+
+enum CampaignType {
+  BROADCAST
+  DRIP
+  AUTO_REPLY
+  FOLLOW_UP
+  BIRTHDAY
+}
+
+enum WhatsAppStatus {
+  DISCONNECTED
+  QR_PENDING
+  CONNECTING
+  CONNECTED
+  DISCONNECTING
+  BANNED
+  ERROR
+}
+
+model Contact {
+  id           String   @id @default(cuid())
+  orgId        String
+  phoneNumber  String
+  name         String?
+  email        String?
+  avatarUrl    String?
+  labels       String?  // JSON array
+  tags         String?  // JSON array
+  customFields String?  // JSON object
+  isBlacklisted Boolean @default(false)
+  isMyContact  Boolean  @default(false)
+  lastMessageAt DateTime?
+  lastSeenAt   DateTime?
+
+  org          Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  messages     Message[]
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([orgId, phoneNumber])
+  @@index([orgId])
+  @@index([phoneNumber])
+}
+
+model Message {
+  id            String      @id @default(cuid())
+  orgId         String
+  sessionId     String
+  campaignId    String?
+  contactId     String?
+  messageId     String?     // WhatsApp message ID
+  fromMe        Boolean     @default(false)
+  type          MessageType @default(TEXT)
+  body          String?
+  mediaUrl      String?
+  mediaType     String?
+  caption       String?
+  status        MessageStatus @default(PENDING)
+  timestamp     DateTime    @default(now())
+  deliveredAt   DateTime?
+  readAt        DateTime?
+  errorAt       DateTime?
+  errorMessage  String?
+  metadata      String?     // JSON
+
+  session       WhatsAppSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  campaign      Campaign?   @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  contact       Contact?    @relation(fields: [contactId], references: [id], onDelete: SetNull)
+
+  @@index([orgId, timestamp])
+  @@index([sessionId])
+  @@index([contactId])
+  @@index([campaignId])
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+  DOCUMENT
+  STICKER
+  LOCATION
+  CONTACT
+  BUTTON
+  LIST
+  TEMPLATE
+}
+
+enum MessageStatus {
+  PENDING
+  SENT
+  DELIVERED
+  READ
+  FAILED
+  DELETED
+}
+
+// ============================================================
+// COMMAND LOGS (J.A.R.V.I.S activity)
+// ============================================================
+
+model CommandLog {
+  id         String      @id @default(cuid())
+  userId     String
+  command    String
+  type       CommandType @default(TEXT)
+  source     CommandSource @default(WEB)
+  status     CommandStatus @default(SUCCESS)
+  response   String?
+  duration   Int?        // ms
+  metadata   String?     // JSON
+  ipAddress  String?
+  userAgent  String?
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime    @default(now())
+
+  @@index([userId, createdAt])
+  @@index([type])
+}
+
+enum CommandType {
+  TEXT
+  VOICE
+  WHATSAPP
+  SYSTEM
+  AI_QUERY
+  AUTOMATION
+}
+
+enum CommandSource {
+  WEB
+  DESKTOP
+  API
+  WEBHOOK
+  AUTOMATION
+}
+
+enum CommandStatus {
+  SUCCESS
+  ERROR
+  TIMEOUT
+  PENDING
+}
+
+// ============================================================
+// DESKTOP LICENSING (for Electron app)
+// ============================================================
+
+model LicenseKey {
+  id            String        @id @default(cuid())
+  key           String        @unique
+  orgId         String?
+  plan          Plan          @default(PRO)
+  type          LicenseType   @default(SINGLE)
+  maxDevices    Int           @default(1)
+  activations   Int           @default(0)
+  status        LicenseStatus @default(INACTIVE)
+  expiresAt     DateTime?
+  issuedAt      DateTime      @default(now())
+  issuedTo      String?       // customer email
+  issuedBy      String?       // admin/reseller
+  notes         String?
+  metadata      String?       // JSON
+
+  org           Organization? @relation(fields: [orgId], references: [id], onDelete: SetNull)
+  devices       Device[]
+
+  @@index([status])
+  @@index([orgId])
+}
+
+enum LicenseType {
+  SINGLE
+  MULTI
+  SITE
+  OEM
+  RESELLER
+}
+
+enum LicenseStatus {
+  INACTIVE
+  ACTIVE
+  EXPIRED
+  REVOKED
+  SUSPENDED
+}
+
+model Device {
+  id            String       @id @default(cuid())
+  orgId         String
+  licenseId     String?
+  hardwareId    String       @unique // HWID fingerprint
+  hostname      String?
+  os            String?
+  osVersion     String?
+  arch          String?
+  cpu           String?
+  ram           Int?         // GB
+  gpu           String?
+  appVersion    String?
+  lastSeenAt    DateTime?
+  firstSeenAt   DateTime     @default(now())
+  status        DeviceStatus @default(ACTIVE)
+  metadata      String?      // JSON
+
+  org           Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  license       LicenseKey?  @relation(fields: [licenseId], references: [id], onDelete: SetNull)
+
+  @@index([orgId])
+  @@index([licenseId])
+}
+
+enum DeviceStatus {
+  ACTIVE
+  INACTIVE
+  BLOCKED
+  OFFLINE
 }
