@@ -1,4 +1,6 @@
-// NSIS installer customization
+; NSIS installer customization for DevFactory
+; Comments use semicolon (;), NOT double-slash (//)
+
 !macro customInstall
   ; Create registry entry for Windows uninstall info
   WriteRegStr HKCU "Software\DevFactory" "InstallPath" "$INSTDIR"

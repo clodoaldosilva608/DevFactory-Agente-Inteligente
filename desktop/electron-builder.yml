@@ -43,8 +43,6 @@ nsis:
 # macOS
 mac:
   target:
-    - target: dmg
-      arch: [x64, arm64]
     - target: zip
       arch: [x64, arm64]
   icon: build/icon.icns
@@ -53,6 +51,8 @@ mac:
   gatekeeperAssess: false
   entitlements: build/entitlements.mac.plist
   entitlementsInherit: build/entitlements.mac.plist
+  # Skip DMG to avoid hdiutil detach issues on CI runners
+  # (zip is sufficient for auto-update and manual install)
 
 dmg:
   title: ${productName} ${version}
