@@ -2,6 +2,7 @@
   "name": "devfactory-desktop",
   "version": "3.7.2",
   "description": "DevFactory — Agente Inteligente para PC. Desktop app cyberpunk com IA + automação + controle remoto.",
+  "homepage": "https://github.com/clodoaldosilva608/DevFactory-Agente-Inteligente",
   "main": "dist/main/index.js",
   "module": "dist/main/index.js",
   "author": {
