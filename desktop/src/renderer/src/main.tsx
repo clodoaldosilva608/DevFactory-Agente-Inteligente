@@ -6,6 +6,8 @@ import LoginPage from "./pages/LoginPage";
 import SetupPage from "./pages/SetupPage";
 import DashboardPage from "./pages/DashboardPage";
 import SettingsPage from "./pages/SettingsPage";
+import AIChatPage from "./pages/AIChatPage";
+import DevicesPage from "./pages/DevicesPage";
 import { UpdateNotifier } from "./components/UpdateNotifier";
 import "./index.css";
 
@@ -33,6 +35,22 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         element={
           <WithUpdateNotifier>
             <DashboardPage />
+          </WithUpdateNotifier>
+        }
+      />
+      <Route
+        path="/aichat"
+        element={
+          <WithUpdateNotifier>
+            <AIChatPage />
+          </WithUpdateNotifier>
+        }
+      />
+      <Route
+        path="/devices"
+        element={
+          <WithUpdateNotifier>
+            <DevicesPage />
           </WithUpdateNotifier>
         }
       />

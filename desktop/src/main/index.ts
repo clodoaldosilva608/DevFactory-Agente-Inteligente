@@ -17,6 +17,8 @@ import { registerExecHandlers } from "./ipc/exec";
 import { registerAuthHandlers } from "./ipc/auth";
 import { registerTelemetryHandlers } from "./ipc/telemetry";
 import { registerDbHandlers } from "./ipc/database";
+import { registerAIHandlers } from "./ipc/ai";
+import { registerSyncHandlers } from "./ipc/sync";
 
 // ============================================================================
 // Configuration
@@ -248,6 +250,8 @@ if (!gotLock) {
     registerAuthHandlers();
     registerTelemetryHandlers();
     registerDbHandlers();
+    registerAIHandlers();
+    registerSyncHandlers();
 
     // Global IPC
     ipcMain.handle("app:version", () => app.getVersion());

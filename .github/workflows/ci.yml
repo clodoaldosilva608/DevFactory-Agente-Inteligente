@@ -1,0 +1,71 @@
+name: CI — Lint & Build Check
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "desktop/**"
+      - "src/**"
+      - "prisma/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "desktop/**"
+      - "src/**"
+      - "prisma/**"
+
+jobs:
+  lint-and-build:
+    name: Lint + Build (Desktop)
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: ./desktop
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: 📥 Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: 🗄️ Generate Prisma client
+        run: bun run db:generate
+
+      - name: 🔍 Lint check
+        run: bun run lint
+        continue-on-error: true # lint warnings shouldn't block
+
+      - name: 🔨 Build main process
+        run: bun run build:main
+
+      - name: 🔨 Build renderer
+        run: bun run build:renderer
+
+      - name: ✅ Build succeeded
+        run: echo "✅ Desktop builds cleanly"
+
+  # Also lint SaaS web (root)
+  lint-web:
+    name: Lint (Web SaaS)
+    runs-on: ubuntu-22.04
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: 📥 Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: 🔍 Lint check
+        run: bun run lint
+        continue-on-error: true

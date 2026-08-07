@@ -140,6 +140,43 @@ const api = {
     backup: () => ipcRenderer.invoke("db:backup"),
   },
 
+  // AI (multi-provider chat)
+  ai: {
+    chat: (messages: any[], conversationId?: string, options?: any) =>
+      ipcRenderer.invoke("ai:chat", { messages, conversationId, ...options }),
+    test: (provider: string, apiKey: string, model: string, baseUrl?: string) =>
+      ipcRenderer.invoke("ai:test", { provider, apiKey, model, baseUrl }),
+    models: (provider?: string) => ipcRenderer.invoke("ai:models", provider),
+    providers: () => ipcRenderer.invoke("ai:providers"),
+    conversations: (limit?: number) => ipcRenderer.invoke("ai:conversations", limit),
+    conversation: (id: string) => ipcRenderer.invoke("ai:conversation", id),
+    deleteConversation: (id: string) => ipcRenderer.invoke("ai:deleteConversation", id),
+    saveSettings: (settings: any) => ipcRenderer.invoke("ai:saveSettings", settings),
+    settings: () => ipcRenderer.invoke("ai:settings"),
+  },
+
+  // Sync (multi-device via LAN)
+  sync: {
+    start: () => ipcRenderer.invoke("sync:start"),
+    stop: () => ipcRenderer.invoke("sync:stop"),
+    status: () => ipcRenderer.invoke("sync:status"),
+    pairingCode: () => ipcRenderer.invoke("sync:pairingCode"),
+    devices: () => ipcRenderer.invoke("sync:devices"),
+    revoke: (deviceId: string) => ipcRenderer.invoke("sync:revoke", deviceId),
+    notify: (payload: any) => ipcRenderer.invoke("sync:notify", payload),
+    localIPs: () => ipcRenderer.invoke("sync:localIPs"),
+    onDeviceConnected: (callback: (device: any) => void) => {
+      const listener = (_e: IpcRendererEvent, device: any) => callback(device);
+      ipcRenderer.on("sync:deviceConnected", listener);
+      return () => ipcRenderer.removeListener("sync:deviceConnected", listener);
+    },
+    onDeviceDisconnected: (callback: (device: any) => void) => {
+      const listener = (_e: IpcRendererEvent, device: any) => callback(device);
+      ipcRenderer.on("sync:deviceDisconnected", listener);
+      return () => ipcRenderer.removeListener("sync:deviceDisconnected", listener);
+    },
+  },
+
   // Telemetry
   telemetry: {
     start: () => ipcRenderer.invoke("telemetry:start"),

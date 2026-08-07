@@ -12,15 +12,19 @@
   - [Setup Wizard (primeiro uso)](#1-setup-wizard-primeiro-uso)
   - [Login](#2-login)
   - [Dashboard](#3-dashboard)
-  - [Settings → IA & API Keys](#4-settings--ia--api-keys)
-  - [Settings → Atualizações](#5-settings--atualizações)
-  - [Settings → Dados & Backup](#6-settings--dados--backup)
-  - [Settings → Segurança](#7-settings--segurança)
-  - [Settings → Ajuda](#8-settings--ajuda)
+  - [AI Chat (qualquer provider)](#4-ai-chat-qualquer-provider)
+  - [Devices & Sync LAN](#5-devices--sync-lan)
+  - [Settings → IA & API Keys](#6-settings--ia--api-keys)
+  - [Settings → Atualizações](#7-settings--atualizações)
+  - [Settings → Dados & Backup](#8-settings--dados--backup)
+  - [Settings → Segurança](#9-settings--segurança)
+  - [Settings → Ajuda](#10-settings--ajuda)
 - [Auto-Update](#-auto-update)
-- [API Keys (qualquer provider)](#-api-keys-qualquer-provider)
+- [Multi-Provider AI](#-multi-provider-ai)
+- [Sync Multi-Device via LAN](#-sync-multi-device-via-lan)
 - [Arquitetura](#-arquitetura)
 - [Build & Distribuição](#-build--distribuição)
+- [GitHub Actions (auto-build)](#-github-actions-auto-build)
 - [Troubleshooting](#-troubleshooting)
 
 ---
@@ -165,7 +169,79 @@ Mostra métricas do seu PC atualizadas a cada 2 segundos:
 
 ---
 
-### 4. Settings → IA & API Keys
+### 4. AI Chat (qualquer provider)
+
+![AI Chat](../download/desktop-aichat-response.png)
+
+**O que faz**: Chat com IA usando qualquer provider configurado (Gemini, OpenAI, Claude, Groq, Mistral, HuggingFace ou Ollama local).
+
+**Layout**:
+- **Sidebar esquerda** — lista de conversas anteriores + botão "Nova Conversa"
+- **Centro** — área de mensagens com bolhas (você à direita, IA à esquerda)
+- **Inferior** — input com Enter para enviar (Shift+Enter para quebra de linha)
+- **Status da IA** — mostra provider + model ativos no header e na sidebar
+
+**Como usar**:
+1. Configure a IA primeiro em Settings → IA & API Keys
+2. Digite sua mensagem no input inferior
+3. Pressione Enter (ou clique no botão Send)
+4. IA responde em 1-3 segundos (dependendo do provider)
+5. Conversas são salvas automaticamente no banco local
+
+**Recursos**:
+- Histórico de conversas persistente
+- Multi-turn (mantém contexto da conversa)
+- Contador de tokens por mensagem
+- Loading indicator enquanto processa
+- Tratamento de erros visível (mensagens vermelhas)
+
+---
+
+### 5. Devices & Sync LAN
+
+![Devices & Sync](../download/desktop-devices-running.png)
+
+**O que faz**: Permite controlar seu PC a partir do celular na mesma rede WiFi.
+
+**Como usar**:
+
+1. **Inicie o servidor sync**:
+   - Vá em Devices (ícone 📱 no header do dashboard)
+   - Clique em "Iniciar" no card "Servidor Sync"
+   - Status muda para Online na porta 3001
+   - URLs de acesso aparecem (ex: `http://192.168.0.10:3001`)
+
+2. **Pareie um dispositivo**:
+   - Clique em "Gerar Código" na seção "Parear Novo Dispositivo"
+   - Código de 6 dígitos aparece na tela (válido por 5 min)
+   - Abra o DevFactory no celular → Settings → Parear
+   - Digite o código exibido no PC
+   - Dispositivo aparece como "Online" na lista
+
+3. **Envie comandos do celular**:
+   - No app mobile, digite: "abrir vscode", "abrir chrome", etc
+   - Comando é executado no PC em tempo real
+   - Resultado retorna para o celular
+
+4. **Envie notificações push**:
+   - Card "Enviar Notificação" aparece quando há dispositivos conectados
+   - Digite título + mensagem
+   - Clique em "Enviar para N dispositivo(s)"
+   - Todos os dispositivos conectados recebem a notificação
+
+**Segurança**:
+- Apenas dispositivos na mesma subnet WiFi podem se conectar
+- Pareamento obrigatório via código de 6 dígitos
+- Tokens únicos por dispositivo (revogáveis a qualquer momento)
+- 100% local — nada passa por nuvem externa
+
+**Revogar dispositivo**:
+- Clique no ícone 🗑️ ao lado do dispositivo
+- Confirme — dispositivo precisará parear novamente
+
+---
+
+### 6. Settings → IA & API Keys
 
 ![IA & API Keys](../download/desktop-settings-ai.png)
 
@@ -212,7 +288,7 @@ Mostra métricas do seu PC atualizadas a cada 2 segundos:
 
 ---
 
-### 5. Settings → Atualizações
+### 7. Settings → Atualizações
 
 ![Atualizações](../download/desktop-settings-updates.png)
 
@@ -234,7 +310,7 @@ Mostra métricas do seu PC atualizadas a cada 2 segundos:
 
 ---
 
-### 6. Settings → Dados & Backup
+### 8. Settings → Dados & Backup
 
 ![Dados & Backup](../download/desktop-settings-data.png)
 
@@ -259,7 +335,7 @@ Mostra métricas do seu PC atualizadas a cada 2 segundos:
 
 ---
 
-### 7. Settings → Segurança
+### 9. Settings → Segurança
 
 **O que faz**: Altera sua senha local.
 
@@ -273,7 +349,7 @@ Mostra métricas do seu PC atualizadas a cada 2 segundos:
 
 ---
 
-### 8. Settings → Ajuda
+### 10. Settings → Ajuda
 
 ![Ajuda](../download/desktop-settings-help.png)
 
@@ -312,9 +388,9 @@ Para publicar uma nova versão:
 
 ---
 
-## 🔑 API Keys (qualquer provider)
+## 🤖 Multi-Provider AI
 
-O DevFactory suporta **6 provedores de IA** com detecção automática:
+O DevFactory suporta **7 provedores de IA** com detecção automática:
 
 | Provider | Free tier | Como obter chave |
 |----------|-----------|------------------|
@@ -323,6 +399,7 @@ O DevFactory suporta **6 provedores de IA** com detecção automática:
 | **Anthropic Claude** | $5 crédito inicial | [console.anthropic.com/settings/keys](https://console.anthropic.com/settings/keys) |
 | **Groq** | 30 req/min, 14400 req/dia | [console.groq.com/keys](https://console.groq.com/keys) |
 | **Mistral AI** | ~$8 crédito/mês | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) |
+| **HuggingFace** | Rate limit variável | [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens) |
 | **Ollama (local)** | 100% gratuito | Instale em [ollama.com](https://ollama.com) — sem chave |
 
 ### Detecção automática
@@ -336,6 +413,95 @@ Cole qualquer chave no campo e o DevFactory detecta qual é o provider:
 - 30+ chars alfanuméricos → Mistral
 
 Você pode configurar **múltiplos providers** e alternar entre eles a qualquer momento.
+
+---
+
+## 📡 Sync Multi-Device via LAN
+
+O DevFactory roda um servidor HTTP local na porta **3001** que permite controlar seu PC a partir do celular na mesma rede WiFi.
+
+### Como funciona
+
+```
+[Seu PC com DevFactory] ← HTTP/Socket.IO → [Celular/Tablet na mesma WiFi]
+       porta 3001
+```
+
+### Recursos
+
+- ✅ **Pareamento por código** — gera código de 6 dígitos no PC, digita no celular
+- ✅ **Comandos remotos** — celular envia "abrir vscode" → PC executa
+- ✅ **Notificações push** — PC envia notificações para todos os dispositivos conectados
+- ✅ **Multi-dispositivo** — quantos celulares/tablets quiser, na mesma rede
+- ✅ **100% local** — nada passa por nuvem externa, sem custo
+- ✅ **Segurança** — apenas mesma subnet WiFi, tokens revogáveis
+
+### URLs de acesso
+
+Quando o servidor está rodando, ele exibe todas as URLs de acesso (uma por interface de rede):
+- `http://192.168.0.10:3001` (WiFi)
+- `http://10.0.0.5:3001` (Ethernet)
+- `http://172.17.0.1:3001` (Docker bridge, se houver)
+
+### App mobile (em breve)
+
+O app mobile DevFactory estará disponível para:
+- iOS (TestFlight)
+- Android (APK direto ou Play Store)
+
+Enquanto isso, qualquer cliente Socket.IO pode se conectar (Postman, script Python, etc).
+
+---
+
+## 🤖 GitHub Actions (auto-build)
+
+O repositório tem 2 workflows configurados:
+
+### 1. CI — Lint & Build Check (`.github/workflows/ci.yml`)
+
+Roda em todo push/PR para `main`:
+- Instala dependências
+- Gera Prisma client
+- Lint check
+- Build main process (TypeScript)
+- Build renderer (Vite)
+- Valida que tudo compila
+
+### 2. Release — Build & Publish (`.github/workflows/release.yml`)
+
+Roda quando você cria uma tag `v*.*.*`:
+
+```bash
+# Exemplo: publicar v3.8.0
+git tag v3.8.0
+git push origin v3.8.0
+```
+
+O workflow:
+1. Roda em paralelo em 3 runners: `windows-latest`, `macos-latest`, `ubuntu-22.04`
+2. Cada um instala Bun, gera Prisma, builda, e empacota com electron-builder
+3. Gera os instaladores:
+   - **Windows**: `DevFactory-Setup-3.8.0.exe` (NSIS) + `DevFactory-3.8.0.exe` (portable)
+   - **macOS**: `DevFactory-3.8.0.dmg` + `DevFactory-3.8.0-mac.zip`
+   - **Linux**: `DevFactory-3.8.0.AppImage` + `DevFactory-3.8.0.deb`
+4. Cria GitHub Release automaticamente com release notes
+5. Apps instalados detectam a nova versão em até 30 min
+6. Notificação aparece no canto superior direito do dashboard
+7. Usuário clica "Baixar Agora" → "Reiniciar e Atualizar"
+
+### Configurar code signing (futuro)
+
+Para remover warnings de "editor desconhecido":
+
+**Windows** (certificado EV):
+1. Comprar certificado EV Code Signing (~R$ 1.500-3.000/ano)
+2. Converter para base64 e adicionar como GitHub Secret: `WIN_CERT_BASE64` + `WIN_CERT_PASSWORD`
+3. Descomentar linhas no workflow
+
+**macOS** (Apple Developer):
+1. Apple Developer Account ($99/ano)
+2. Adicionar secrets: `MAC_CERT_BASE64`, `MAC_CERT_PASSWORD`, `APPLE_ID`, `APPLE_APP_SPECIFIC_PASSWORD`, `APPLE_TEAM_ID`
+3. Descomentar linhas no workflow
 
 ---
 

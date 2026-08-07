@@ -20,6 +20,8 @@ import {
   Clock,
   Send,
   HelpCircle,
+  Brain,
+  Smartphone,
 } from "lucide-react";
 
 type Telemetry = {
@@ -218,6 +220,20 @@ export default function DashboardPage() {
             <Clock className="h-3 w-3" />
             <span className="tabular-nums">{clock.toLocaleTimeString("pt-BR", { hour12: false })}</span>
           </div>
+          <button
+            onClick={() => navigate("/aichat")}
+            className="p-1.5 hover:bg-cyan-500/10 transition-colors titlebar-no-drag"
+            title="AI Chat"
+          >
+            <Brain className="h-3.5 w-3.5 text-slate-400 hover:text-cyan-400" />
+          </button>
+          <button
+            onClick={() => navigate("/devices")}
+            className="p-1.5 hover:bg-cyan-500/10 transition-colors titlebar-no-drag"
+            title="Dispositivos & Sync"
+          >
+            <Smartphone className="h-3.5 w-3.5 text-slate-400 hover:text-cyan-400" />
+          </button>
           <button
             onClick={() => navigate("/settings")}
             className="p-1.5 hover:bg-cyan-500/10 transition-colors titlebar-no-drag"

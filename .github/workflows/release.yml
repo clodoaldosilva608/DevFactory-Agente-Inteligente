@@ -1,0 +1,231 @@
+name: Build & Release Desktop App
+
+on:
+  push:
+    tags:
+      - "v*.*.*" # triggers on v3.7.2, v3.8.0, etc
+  workflow_dispatch: # manual trigger
+
+permissions:
+  contents: write # needed to create GitHub Release
+
+jobs:
+  # ===========================================================================
+  # WINDOWS BUILD
+  # ===========================================================================
+  build-windows:
+    name: Build Windows (.exe)
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: ./desktop
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: 📥 Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: 🗄️ Generate Prisma client
+        run: bun run db:generate
+
+      - name: 🔨 Build main + renderer
+        run: bun run build
+        env:
+          NODE_ENV: production
+
+      - name: 📦 Package Windows installer (.exe NSIS + portable)
+        run: bun run dist:win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_ENV: production
+
+      - name: 📤 Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: devfactory-windows
+          path: |
+            desktop/release/*.exe
+            desktop/release/*.yml
+          retention-days: 30
+
+  # ===========================================================================
+  # MACOS BUILD
+  # ===========================================================================
+  build-macos:
+    name: Build macOS (.dmg)
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: ./desktop
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: 📥 Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: 🗄️ Generate Prisma client
+        run: bun run db:generate
+
+      - name: 🔨 Build main + renderer
+        run: bun run build
+        env:
+          NODE_ENV: production
+
+      - name: 📦 Package macOS (.dmg + .zip)
+        run: bun run dist:mac
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_ENV: production
+          # Code signing (when you have certificates)
+          # CSC_LINK: ${{ secrets.MAC_CERT_BASE64 }}
+          # CSC_KEY_PASSWORD: ${{ secrets.MAC_CERT_PASSWORD }}
+          # APPLE_ID: ${{ secrets.APPLE_ID }}
+          # APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          # APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
+      - name: 📤 Upload macOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: devfactory-macos
+          path: |
+            desktop/release/*.dmg
+            desktop/release/*.zip
+            desktop/release/*.yml
+          retention-days: 30
+
+  # ===========================================================================
+  # LINUX BUILD
+  # ===========================================================================
+  build-linux:
+    name: Build Linux (.AppImage + .deb)
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: ./desktop
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: 📥 Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: 🗄️ Generate Prisma client
+        run: bun run db:generate
+
+      - name: 🔨 Build main + renderer
+        run: bun run build
+        env:
+          NODE_ENV: production
+
+      - name: 📦 Package Linux (.AppImage + .deb + .tar.gz)
+        run: bun run dist:linux
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_ENV: production
+
+      - name: 📤 Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: devfactory-linux
+          path: |
+            desktop/release/*.AppImage
+            desktop/release/*.deb
+            desktop/release/*.tar.gz
+            desktop/release/*.yml
+          retention-days: 30
+
+  # ===========================================================================
+  # RELEASE — aggregate all artifacts into GitHub Release
+  # ===========================================================================
+  release:
+    name: 🚀 Publish GitHub Release
+    needs: [build-windows, build-macos, build-linux]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📥 Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: 📋 List artifacts
+        run: find artifacts -type f | head -50
+
+      - name: 📝 Generate release notes
+        id: notes
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "## 🚀 DevFactory $TAG" > RELEASE_NOTES.md
+          echo "" >> RELEASE_NOTES.md
+          echo "### 📦 Downloads disponíveis" >> RELEASE_NOTES.md
+          echo "" >> RELEASE_NOTES.md
+          echo "**Windows:**" >> RELEASE_NOTES.md
+          echo "- \`DevFactory-Setup-${TAG#v}.exe\` — Instalador NSIS (recomendado)" >> RELEASE_NOTES.md
+          echo "- \`DevFactory-${TAG#v}.exe\` — Portable (sem instalação)" >> RELEASE_NOTES.md
+          echo "" >> RELEASE_NOTES.md
+          echo "**macOS:**" >> RELEASE_NOTES.md
+          echo "- \`DevFactory-${TAG#v}.dmg\` — Imagem de instalação" >> RELEASE_NOTES.md
+          echo "- \`DevFactory-${TAG#v}-mac.zip\` — Zip (auto-update)" >> RELEASE_NOTES.md
+          echo "" >> RELEASE_NOTES.md
+          echo "**Linux:**" >> RELEASE_NOTES.md
+          echo "- \`DevFactory-${TAG#v}.AppImage\` — Executável universal" >> RELEASE_NOTES.md
+          echo "- \`DevFactory-${TAG#v}.deb\` — Pacote Debian/Ubuntu" >> RELEASE_NOTES.md
+          echo "" >> RELEASE_NOTES.md
+          echo "### 🔄 Auto-Update" >> RELEASE_NOTES.md
+          echo "" >> RELEASE_NOTES.md
+          echo "Apps instalados detectam esta versão automaticamente em até 30 minutos." >> RELEASE_NOTES.md
+          echo "Notificação aparece no canto superior direito → 'Baixar Agora' → 'Reiniciar e Atualizar'." >> RELEASE_NOTES.md
+          echo "" >> RELEASE_NOTES.md
+          echo "### 🔧 Instalação" >> RELEASE_NOTES.md
+          echo "" >> RELEASE_NOTES.md
+          echo "- **Windows**: execute o .exe e siga o wizard" >> RELEASE_NOTES.md
+          echo "- **macOS**: abra o .dmg e arraste para Applications (clique direito → Abrir na 1ª vez)" >> RELEASE_NOTES.md
+          echo "- **Linux**: \`chmod +x DevFactory-*.AppImage && ./DevFactory-*.AppImage\`" >> RELEASE_NOTES.md
+
+      - name: 🚀 Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: DevFactory ${{ github.ref_name }}
+          body_path: RELEASE_NOTES.md
+          draft: false
+          prerelease: false
+          files: |
+            artifacts/devfactory-windows/*.exe
+            artifacts/devfactory-windows/*.yml
+            artifacts/devfactory-macos/*.dmg
+            artifacts/devfactory-macos/*.zip
+            artifacts/devfactory-macos/*.yml
+            artifacts/devfactory-linux/*.AppImage
+            artifacts/devfactory-linux/*.deb
+            artifacts/devfactory-linux/*.tar.gz
+            artifacts/devfactory-linux/*.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: ✅ Notify
+        run: |
+          echo "🎉 Release ${{ github.ref_name }} published!"
+          echo "📦 Artifacts: Windows .exe, macOS .dmg, Linux .AppImage"
+          echo "🔄 Auto-update will detect this version in 30 min for all installed apps"

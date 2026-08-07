@@ -9,6 +9,8 @@ const memoryStore: Record<string, any> = {
     aiModels: { gemini: "gemini-2.0-flash" },
     activeAIProvider: "gemini",
   },
+  aiSettings: { provider: "gemini", apiKey: "AIza...", model: "gemini-2.0-flash" },
+  syncRunning: false,
 };
 
 const mockDevFactory = {
@@ -161,6 +163,128 @@ const mockDevFactory = {
     path: async () => "/home/dev/.config/devfactory-desktop/devfactory.db",
     openFolder: async () => ({ ok: true }),
     backup: async () => ({ ok: true, path: "/tmp/devfactory-backup.db" }),
+  },
+
+  // AI (multi-provider)
+  ai: {
+    chat: async (messages: any[], conversationId?: string) => {
+      console.log("[mock] ai.chat:", messages.length, "msgs");
+      await new Promise((r) => setTimeout(r, 800 + Math.random() * 1200));
+      const lastMsg = messages[messages.length - 1]?.content || "";
+      const responses = [
+        `Olá! Sou o DevFactory AI. Recebi sua mensagem: "${lastMsg.slice(0, 80)}". Estou pronto para ajudar com qualquer tarefa no seu PC.`,
+        `Entendi sua solicitação. Como agente inteligente, posso executar comandos, abrir apps, manipular arquivos e muito mais. O que você gostaria de fazer?`,
+        `Processando: "${lastMsg.slice(0, 60)}"... \n\nPosso ajudar com:\n- Abrir aplicativos ("abrir vscode")\n- Executar scripts\n- Capturar screenshots\n- Enviar comandos remotos\n- Análise de sistema`,
+        `Boa pergunta! Como IA local rodando no seu PC, tenho acesso ao sistema e posso executar tarefas em tempo real. O que precisa?`,
+      ];
+      const content = responses[Math.floor(Math.random() * responses.length)];
+      const convId = conversationId || "mock-conv-" + Date.now();
+      return {
+        content,
+        model: "gemini-2.0-flash",
+        tokensUsed: Math.floor(Math.random() * 500 + 100),
+        finishReason: "stop",
+        conversationId: convId,
+      };
+    },
+    test: async (provider: string, _apiKey: string, model: string) => {
+      await new Promise((r) => setTimeout(r, 800));
+      return { ok: true, message: `Conexão OK com ${provider}. Modelo: ${model}` };
+    },
+    models: async (provider?: string) => {
+      const all: any = {
+        gemini: ["gemini-2.0-flash", "gemini-1.5-pro", "gemini-1.5-flash"],
+        openai: ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo"],
+        anthropic: ["claude-3-5-sonnet-20241022", "claude-3-5-haiku-20241022"],
+        groq: ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"],
+        mistral: ["mistral-large-latest", "mistral-small-latest"],
+        huggingface: ["meta-llama/Llama-3.3-70B-Instruct", "mistralai/Mistral-7B-Instruct-v0.3"],
+        ollama: ["llama3.1", "mistral", "phi3", "qwen2.5"],
+      };
+      return provider ? all[provider] || [] : all;
+    },
+    providers: async () => [
+      { id: "gemini", label: "Google Gemini", freeTier: "Free: 1500 req/dia", models: ["gemini-2.0-flash"] },
+      { id: "openai", label: "OpenAI GPT", freeTier: "Pago", models: ["gpt-4o"] },
+      { id: "anthropic", label: "Anthropic Claude", freeTier: "$5 crédito", models: ["claude-3-5-sonnet-20241022"] },
+      { id: "groq", label: "Groq", freeTier: "Free: 14400 req/dia", models: ["llama-3.3-70b-versatile"] },
+      { id: "mistral", label: "Mistral AI", freeTier: "~$8/mês", models: ["mistral-large-latest"] },
+      { id: "huggingface", label: "HuggingFace", freeTier: "Variável", models: ["meta-llama/Llama-3.3-70B-Instruct"] },
+      { id: "ollama", label: "Ollama (Local)", freeTier: "100% Grátis", models: ["llama3.1"] },
+    ],
+    conversations: async () => [
+      { id: "1", title: "Como abrir apps?", provider: "gemini", model: "gemini-2.0-flash", updatedAt: new Date().toISOString(), _count: { messages: 4 } },
+      { id: "2", title: "Análise de sistema", provider: "ollama", model: "llama3.1", updatedAt: new Date(Date.now() - 3600000).toISOString(), _count: { messages: 8 } },
+    ],
+    conversation: async (id: string) => ({
+      id,
+      title: "Conversa de exemplo",
+      provider: "gemini",
+      model: "gemini-2.0-flash",
+      messages: [
+        { role: "user", content: "Olá!", createdAt: new Date().toISOString() },
+        { role: "assistant", content: "Oi! Como posso ajudar?", createdAt: new Date().toISOString(), tokens: 12 },
+      ],
+    }),
+    deleteConversation: async () => ({ ok: true }),
+    saveSettings: async (settings: any) => {
+      memoryStore.aiSettings = settings;
+      return { ok: true };
+    },
+    settings: async () => memoryStore.aiSettings || { provider: "gemini", apiKey: "AIza...", model: "gemini-2.0-flash" },
+  },
+
+  // Sync (multi-device LAN)
+  sync: {
+    start: async () => {
+      memoryStore.syncRunning = true;
+      return { ok: true, port: 3001, urls: ["http://192.168.0.10:3001", "http://10.0.0.5:3001"] };
+    },
+    stop: async () => {
+      memoryStore.syncRunning = false;
+      return { ok: true };
+    },
+    status: async () => ({
+      running: memoryStore.syncRunning || false,
+      port: memoryStore.syncRunning ? 3001 : null,
+      urls: ["http://192.168.0.10:3001"],
+      connectedDevices: 1,
+    }),
+    pairingCode: async () => ({
+      code: String(Math.floor(100000 + Math.random() * 900000)),
+      sessionId: "mock-session",
+      expiresIn: 300,
+    }),
+    devices: async () => [
+      {
+        id: "1",
+        name: "iPhone 15 Pro",
+        deviceType: "MOBILE",
+        os: "iOS 18",
+        isOnline: true,
+        isRevoked: false,
+        lastSeenAt: new Date().toISOString(),
+        createdAt: new Date(Date.now() - 86400000).toISOString(),
+      },
+      {
+        id: "2",
+        name: "iPad Pro",
+        deviceType: "TABLET",
+        os: "iPadOS 18",
+        isOnline: false,
+        isRevoked: false,
+        lastSeenAt: new Date(Date.now() - 3600000).toISOString(),
+        createdAt: new Date(Date.now() - 7 * 86400000).toISOString(),
+      },
+    ],
+    revoke: async () => ({ ok: true }),
+    notify: async () => ({ ok: true }),
+    localIPs: async () => [
+      { name: "eth0", address: "192.168.0.10", family: "IPv4" },
+      { name: "wlan0", address: "192.168.0.11", family: "IPv4" },
+    ],
+    onDeviceConnected: (_callback: (device: any) => void) => () => {},
+    onDeviceDisconnected: (_callback: (device: any) => void) => () => {},
   },
   telemetry: {
     start: async () => {
