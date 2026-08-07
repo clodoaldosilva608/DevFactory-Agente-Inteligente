@@ -9,7 +9,7 @@ const navLinks = [
   { label: "Início", href: "#inicio" },
   { label: "Recursos", href: "#recursos" },
   { label: "Dashboard", href: "#dashboard" },
-  { label: "WhatsApp Bot", href: "#whatsapp" },
+  { label: "Comandos", href: "#comandos" },
   { label: "Planos", href: "#planos" },
 ];
 
@@ -44,11 +44,10 @@ export function SiteHeader({ isAuthenticated = false }: { isAuthenticated?: bool
             </div>
             <div className="flex flex-col leading-none">
               <span className="font-display font-bold text-lg tracking-widest text-cyan-400 text-glow-cyan">
-                BOTZAP
-                <span className="text-red-500 text-glow-red">BR</span>
+                Dev<span className="text-red-500 text-glow-red">Factory</span>
               </span>
               <span className="font-mono-cyber text-[9px] uppercase tracking-[0.3em] text-slate-500">
-                J.A.R.V.I.S System
+                Agente Inteligente
               </span>
             </div>
           </a>

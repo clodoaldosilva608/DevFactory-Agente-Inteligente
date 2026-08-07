@@ -46,7 +46,7 @@ export default function RegisterPage() {
         toast.error(data.error || "Erro ao registrar");
         return;
       }
-      toast.success("Conta criada! Bem-vindo ao J.A.R.V.I.S 🚀", {
+      toast.success("Conta criada! Bem-vindo ao DevFactory 🚀", {
         description: "Fazendo login automático...",
       });
       // Auto-login after register
@@ -83,7 +83,7 @@ export default function RegisterPage() {
             <Zap className="h-7 w-7 text-cyan-400" fill="currentColor" />
           </div>
           <h1 className="font-display font-black text-2xl text-cyan-400 text-glow-cyan tracking-widest">
-            BOTZAP<span className="text-red-500 text-glow-red">BR</span>
+            Dev<span className="text-red-500 text-glow-red">Factory</span>
           </h1>
           <p className="font-mono-cyber text-[10px] uppercase tracking-[0.3em] text-slate-500 mt-1">
             Criar Conta — Trial 7 dias grátis
@@ -94,8 +94,8 @@ export default function RegisterPage() {
         <div className="mb-6 p-3 bg-cyan-500/5 border border-cyan-500/20 clip-cyber-sm space-y-1.5">
           {[
             "Trial 7 dias — sem cartão de crédito",
-            "1 número de WhatsApp incluído",
-            "IA J.A.R.V.I.S completa + comandos por voz",
+            "1 dispositivo pareado incluído",
+            "IA multi-provider + comandos por voz",
             "Cancele quando quiser",
           ].map((b) => (
             <div key={b} className="flex items-center gap-2 text-[11px] text-slate-300 font-mono-cyber">

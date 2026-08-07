@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/jarvis/site-header";
 import { HeroSection } from "@/components/jarvis/hero-section";
 import { FeaturesSection } from "@/components/jarvis/features-section";
 import { DashboardSection } from "@/components/jarvis/dashboard-section";
-import { WhatsAppSection } from "@/components/jarvis/whatsapp-section";
+import { CommandsSection } from "@/components/jarvis/commands-section";
 import { PricingSection } from "@/components/jarvis/pricing-section";
 import { Footer } from "@/components/jarvis/footer";
 
@@ -23,7 +23,7 @@ export default async function Home() {
           <HeroSection />
           <FeaturesSection />
           <DashboardSection />
-          <WhatsAppSection />
+          <CommandsSection />
           <PricingSection />
         </main>
 

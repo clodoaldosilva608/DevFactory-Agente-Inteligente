@@ -11,16 +11,16 @@ type LogLine = {
 };
 
 const seedLogs: Omit<LogLine, "id" | "time">[] = [
-  { type: "SYS", text: "J.A.R.V.I.S ativo. Inicializando protocolos..." },
-  { type: "OK", text: "Conexão com Supabase estabelecida." },
+  { type: "SYS", text: "DevFactory ativo. Inicializando protocolos..." },
+  { type: "OK", text: "Conexão com cloud sync estabelecida." },
   { type: "JARVIS", text: "Às ordens, Chefe! 02:27 por voz, tô pronto pra te ajudar." },
-  { type: "BOT", text: "WhatsApp #1 conectado: +55 11 9****-****" },
-  { type: "BOT", text: "Campanha 'Black Friday' iniciada — 1.247 contatos." },
-  { type: "OK", text: "Disparo concluído em 47s. Taxa de entrega: 99.2%" },
+  { type: "BOT", text: "Dispositivo pareado: iPhone 15 Pro — conectado." },
+  { type: "BOT", text: "Comando remoto recebido: 'abrir VS Code no PC'." },
+  { type: "OK", text: "Comando executado em 312ms. Status: sucesso." },
   { type: "WARN", text: "Microfone silenciado pelo usuário." },
   { type: "SYS", text: "Telemetria: CPU 24% | RAM 205MB/s | GPU 18%" },
-  { type: "JARVIS", text: "Detectei 3 novas mensagens. Deseja que eu responda?" },
-  { type: "BOT", text: "Webhook N8N acionado: fluxo 'atendimento.xlsx'" },
+  { type: "JARVIS", text: "Detectei 3 tarefas agendadas. Deseja executar agora?" },
+  { type: "BOT", text: "Webhook N8N acionado: fluxo 'backup_diario.json'" },
   { type: "OK", text: "Backup automático realizado com sucesso." },
   { type: "SYS", text: "Scan de segurança completo. Nenhuma ameaça." },
 ];
@@ -86,7 +86,7 @@ export function LogsTerminal() {
           </span>
         </div>
         <span className="font-mono-cyber text-[9px] uppercase tracking-widest text-slate-500">
-          tty://jarvis.log
+          tty://devfactory.log
         </span>
       </div>
 

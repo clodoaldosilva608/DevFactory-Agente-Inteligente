@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 const footerLinks = [
   {
     title: "Produto",
-    links: ["Recursos", "Dashboard", "WhatsApp Bot", "Planos", "Roadmap"],
+    links: ["Recursos", "Dashboard", "Comandos", "Planos", "Roadmap"],
   },
   {
     title: "Recursos",
@@ -49,7 +49,7 @@ export function Footer() {
           <div>
             <h3 className="font-display font-bold text-xl text-white mb-1">
               Pronto para ativar o{" "}
-              <span className="text-cyan-400 text-glow-cyan">J.A.R.V.I.S</span>?
+              <span className="text-cyan-400 text-glow-cyan">DevFactory</span>?
             </h3>
             <p className="text-sm text-slate-400">
               Comece seu teste grátis de 7 dias. Sem cartão de crédito.
@@ -76,17 +76,15 @@ export function Footer() {
               </div>
               <div className="flex flex-col leading-none">
                 <span className="font-display font-bold text-lg tracking-widest text-cyan-400 text-glow-cyan">
-                  BOTZAP<span className="text-red-500 text-glow-red">BR</span>
+                  Dev<span className="text-red-500 text-glow-red">Factory</span>
                 </span>
                 <span className="font-mono-cyber text-[9px] uppercase tracking-[0.3em] text-slate-500">
-                  J.A.R.V.I.S System
+                  Agente Inteligente
                 </span>
               </div>
             </a>
             <p className="text-sm text-slate-400 mb-4 leading-relaxed max-w-xs">
-              Plataforma de automação inteligente e assistente virtual que
-              combina IA, automação de WhatsApp e controle de sistema com
-              interface sci-fi imersiva.
+              Agente inteligente que executa tarefas no seu PC, recebe comandos do celular e opera com interface HUD tanto no desktop quanto no mobile.
             </p>
 
             {/* Socials */}
@@ -129,7 +127,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="pt-6 border-t border-cyan-500/20 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-4 text-xs font-mono-cyber text-slate-500">
-            <span>© 2026 BotZapBR / J.A.R.V.I.S</span>
+            <span>© 2026 DevFactory</span>
             <span className="text-slate-700">|</span>
             <a href="#" className="hover:text-cyan-400 transition-colors flex items-center gap-1">
               <FileText className="h-3 w-3" />

@@ -35,7 +35,7 @@ export function CommandBar() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         inputRef.current?.focus();
-        toast.success("J.A.R.V.I.S despertado", {
+        toast.success("DevFactory despertado", {
           description: "Sistema pronto para comandos.",
         });
       }
@@ -48,7 +48,7 @@ export function CommandBar() {
     e?.preventDefault();
     if (!input.trim()) return;
     setHistory((h) => [...h, input]);
-    toast.success("Comando enviado ao J.A.R.V.I.S", {
+    toast.success("Comando enviado ao DevFactory", {
       description: `"${input}"`,
     });
     setInput("");

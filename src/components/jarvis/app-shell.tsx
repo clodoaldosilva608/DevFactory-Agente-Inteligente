@@ -33,7 +33,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "WhatsApp", href: "/whatsapp", icon: MessageSquare, badge: "3" },
+  { label: "Comandos", href: "/whatsapp", icon: MessageSquare, badge: "3" },
   { label: "Billing", href: "/billing", icon: CreditCard },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
@@ -109,7 +109,7 @@ export function AppShell({ session, children }: { session: Session; children: Re
 
           {/* Breadcrumb */}
           <div className="hidden sm:flex items-center gap-2 text-xs font-mono-cyber uppercase tracking-widest text-slate-500">
-            <span className="text-cyan-400">J.A.R.V.I.S</span>
+            <span className="text-cyan-400">DevFactory</span>
             <ChevronRight className="h-3 w-3" />
             <span className="text-slate-300">{pathname.split("/")[1] || "dashboard"}</span>
           </div>
@@ -187,10 +187,10 @@ function SidebarContent({
           </div>
           <div className="flex flex-col leading-none">
             <span className="font-display font-bold text-base tracking-widest text-cyan-400 text-glow-cyan">
-              BOTZAP<span className="text-red-500 text-glow-red">BR</span>
+              Dev<span className="text-red-500 text-glow-red">Factory</span>
             </span>
             <span className="font-mono-cyber text-[8px] uppercase tracking-[0.3em] text-slate-500">
-              J.A.R.V.I.S Console
+              DevFactory Console
             </span>
           </div>
         </Link>

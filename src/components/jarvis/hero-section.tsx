@@ -3,21 +3,22 @@
 import { motion } from "framer-motion";
 import {
   ArrowRight,
-  Cpu,
-  Bot,
-  ShieldCheck,
-  Sparkles,
+  Brain,
+  Mic,
+  Smartphone,
   Zap,
   Terminal,
   Star,
+  ShieldCheck,
+  Cpu,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const badges = [
-  { icon: Sparkles, label: "Inteligência Artificial" },
-  { icon: Bot, label: "Automação Avançada" },
-  { icon: Cpu, label: "Controle Total do Sistema" },
-  { icon: ShieldCheck, label: "100% Compatível Windows" },
+  { icon: Brain, label: "IA Nativa" },
+  { icon: Mic, label: "Controle por Voz" },
+  { icon: Smartphone, label: "Multi-Dispositivo" },
+  { icon: Zap, label: "Automação de Tarefas" },
 ];
 
 export function HeroSection() {
@@ -43,14 +44,14 @@ export function HeroSection() {
           <span className="text-cyan-400">v3.7.2 // build 2026.08</span>
         </motion.div>
 
-        {/* H1 — J.A.R.V.I.S */}
+        {/* H1 — DevFactory */}
         <motion.h1
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.1 }}
           className="font-display font-black text-5xl sm:text-7xl md:text-8xl tracking-tight leading-none"
         >
-          <span className="text-glow-cyan-strong text-cyan-400">J.A.R.V.I.S</span>
+          <span className="text-glow-cyan-strong text-cyan-400">DevFactory</span>
         </motion.h1>
 
         <motion.p
@@ -59,31 +60,29 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-3 font-mono-cyber text-xs sm:text-sm uppercase tracking-[0.4em] text-slate-400"
         >
-          {"// Assistente Inteligente para Windows"}
+          {"// Agente Inteligente"}
         </motion.p>
 
-        {/* Subtitle — BotZapBR */}
+        {/* Subtitle */}
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
           className="mt-8 font-display font-bold text-2xl sm:text-4xl md:text-5xl text-white"
         >
-          <span className="text-holographic">BotZapBR</span>
-          <span className="text-slate-400 mx-3">/</span>
-          <span className="text-white">Automação Inteligente para WhatsApp</span>
+          <span className="text-holographic">Seu PC obedece.</span>{" "}
+          <span className="text-slate-300">Seu celular comanda.</span>
         </motion.h2>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="mt-6 max-w-2xl mx-auto text-base sm:text-lg text-slate-400 leading-relaxed"
+          className="mt-6 max-w-3xl mx-auto text-base sm:text-lg text-slate-400 leading-relaxed"
         >
-          Combine inteligência artificial avançada, automação de WhatsApp e
-          controle de sistema com uma interface imersiva inspirada no HUD do
-          J.A.R.V.I.S. Transforme sua produtividade com telemetria em tempo
-          real, comandos por voz e disparos em massa.
+          Agente inteligente que executa tarefas no seu PC, recebe comandos do
+          celular e opera com interface HUD tanto no desktop quanto no mobile.
+          IA + automação + controle remoto em um único sistema.
         </motion.p>
 
         {/* Badges */}
@@ -130,7 +129,7 @@ export function HeroSection() {
           >
             <a href="#dashboard">
               <Terminal className="h-4 w-4 mr-2" />
-              Ver Dashboard
+              Ver Demonstração
             </a>
           </Button>
         </motion.div>
@@ -140,7 +139,7 @@ export function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 1.2 }}
-          className="mt-12 flex items-center justify-center gap-6 text-xs font-mono-cyber uppercase tracking-widest text-slate-600"
+          className="mt-12 flex flex-wrap items-center justify-center gap-6 text-xs font-mono-cyber uppercase tracking-widest text-slate-600"
         >
           <span className="flex items-center gap-1.5">
             <ShieldCheck className="h-3.5 w-3.5 text-green-400" />
@@ -154,6 +153,11 @@ export function HeroSection() {
           <span className="hidden sm:flex items-center gap-1.5">
             <Star className="h-3.5 w-3.5 text-cyan-400" />
             4.9/5 Avaliação
+          </span>
+          <span className="text-slate-700 hidden sm:inline">|</span>
+          <span className="hidden sm:flex items-center gap-1.5">
+            <Cpu className="h-3.5 w-3.5 text-cyan-400" />
+            Windows + Mac + Linux
           </span>
         </motion.div>
       </div>

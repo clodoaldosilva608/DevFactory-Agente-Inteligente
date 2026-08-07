@@ -61,7 +61,7 @@ export function DashboardSection() {
             className="font-display font-bold text-3xl sm:text-5xl text-white"
           >
             Painel de Controle{" "}
-            <span className="text-cyan-400 text-glow-cyan">J.A.R.V.I.S</span>
+            <span className="text-cyan-400 text-glow-cyan">DevFactory</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -99,7 +99,7 @@ export function DashboardSection() {
                   <span className="text-[8px] font-bold text-cyan-400">J</span>
                 </div>
                 <span className="font-display font-bold text-xs tracking-widest text-cyan-400">
-                  J.A.R.V.I.S
+                  DevFactory
                 </span>
                 <span className="font-mono-cyber text-[9px] uppercase tracking-widest text-slate-500">
                   v3.7.2 — Comando & Controle
@@ -144,7 +144,7 @@ export function DashboardSection() {
                 <span key={k} className="flex">
                   <span className="px-4">SISTEMA OPERACIONAL</span>
                   <span className="px-4 text-slate-600">|</span>
-                  <span className="px-4 text-green-400">● JARVIS ONLINE</span>
+                  <span className="px-4 text-green-400">● DEVFACTORY ONLINE</span>
                   <span className="px-4 text-slate-600">|</span>
                   <span className="px-4">PROT: CYBERPUNK-7</span>
                   <span className="px-4 text-slate-600">|</span>
@@ -152,7 +152,7 @@ export function DashboardSection() {
                   <span className="px-4 text-slate-600">|</span>
                   <span className="px-4">LAT: 32MS</span>
                   <span className="px-4 text-slate-600">|</span>
-                  <span className="px-4 text-cyan-400">SAUDAÇÃO INICIAL ENVIADA</span>
+                  <span className="px-4 text-cyan-400">DISPOSITIVOS SYNC</span>
                   <span className="px-4 text-slate-600">|</span>
                   <span className="px-4">REDE: 154MBPS</span>
                   <span className="px-4 text-slate-600">|</span>
@@ -221,7 +221,7 @@ export function DashboardSection() {
           transition={{ delay: 0.3 }}
           className="mt-6 text-center font-mono-cyber text-[10px] uppercase tracking-widest text-slate-600"
         >
-          {"// Demonstração interativa — clique nos botões para testar o J.A.R.V.I.S"}
+          {"// Demonstração interativa — clique nos botões para testar o DevFactory"}
         </motion.p>
       </div>
     </section>

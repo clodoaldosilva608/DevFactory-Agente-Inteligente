@@ -127,7 +127,7 @@ export default function LoginPage() {
             <Zap className="h-7 w-7 text-cyan-400" fill="currentColor" />
           </div>
           <h1 className="font-display font-black text-2xl text-cyan-400 text-glow-cyan tracking-widest">
-            BOTZAP<span className="text-red-500 text-glow-red">BR</span>
+            Dev<span className="text-red-500 text-glow-red">Factory</span>
           </h1>
           <p className="font-mono-cyber text-[10px] uppercase tracking-[0.3em] text-slate-500 mt-1">
             Acessar Sistema

@@ -82,7 +82,7 @@ export const authOptions: NextAuthOptions = {
           user = await db.user.create({
             data: {
               phone: credentials.phone,
-              email: `${credentials.phone.replace(/\D/g, "")}@phone.botzapbr.com`,
+              email: `${credentials.phone.replace(/\D/g, "")}@phone.devfactory.app`,
               name: `Usuário ${credentials.phone.slice(-4)}`,
               phoneVerified: new Date(),
             },
@@ -113,7 +113,7 @@ export const authOptions: NextAuthOptions = {
           pass: process.env.SMTP_PASS || "",
         },
       },
-      from: process.env.SMTP_FROM || "BotZapBR <noreply@botzapbr.com>",
+      from: process.env.SMTP_FROM || "DevFactory <noreply@devfactory.app>",
     }),
   ],
   pages: {

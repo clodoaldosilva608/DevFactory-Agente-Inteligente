@@ -25,25 +25,25 @@ const orbitron = Orbitron({
 });
 
 export const metadata: Metadata = {
-  title: "BotZapBR / J.A.R.V.I.S — Automação Inteligente para WhatsApp",
+  title: "DevFactory — Agente Inteligente para PC e Celular",
   description:
-    "Plataforma de automação inteligente e assistente virtual que combina IA, automação de WhatsApp e controle de sistema com interface sci-fi imersiva estilo J.A.R.V.I.S.",
+    "Agente inteligente que executa tarefas no seu PC, recebe comandos do celular e opera com interface HUD tanto no desktop quanto no mobile. IA + automação + controle remoto em um único sistema.",
   keywords: [
-    "BotZapBR",
-    "JARVIS",
-    "automação WhatsApp",
+    "DevFactory",
+    "agente inteligente",
+    "automação de tarefas",
+    "controle remoto PC",
+    "comandos por voz",
     "IA",
-    "assistente virtual",
-    "cyberpunk",
-    "N8N",
-    "automação",
+    "multi-dispositivo",
+    "assistente desktop",
   ],
-  authors: [{ name: "BotZapBR" }],
+  authors: [{ name: "DevFactory" }],
   openGraph: {
-    title: "BotZapBR / J.A.R.V.I.S — Automação Inteligente",
+    title: "DevFactory — Agente Inteligente",
     description:
-      "IA + Automação WhatsApp + Controle de Sistema com interface cyberpunk imersiva.",
-    siteName: "BotZapBR",
+      "Execute tarefas no PC, controle pelo celular, IA em qualquer dispositivo.",
+    siteName: "DevFactory",
     type: "website",
   },
 };
@@ -79,4 +79,3 @@ export default function RootLayout({
     </html>
   );
 }
-

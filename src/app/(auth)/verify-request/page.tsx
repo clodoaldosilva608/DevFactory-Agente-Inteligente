@@ -38,7 +38,7 @@ export default function VerifyRequestPage() {
         </p>
         <div className="mt-6 flex items-center justify-center gap-2 text-[9px] font-mono-cyber uppercase tracking-widest text-slate-600">
           <Zap className="h-3 w-3 text-cyan-400" fill="currentColor" />
-          BotZapBR / J.A.R.V.I.S
+          DevFactory
         </div>
       </motion.div>
     </div>

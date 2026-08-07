@@ -283,7 +283,7 @@ function ApiTab() {
           <div className="p-3 bg-cyan-500/[0.03] border border-cyan-500/15 clip-cyber-sm flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Check className="h-3 w-3 text-green-400" />
-              <code className="font-mono-cyber text-[11px] text-cyan-300">https://api.minhaapp.com/webhooks/botzapbr</code>
+              <code className="font-mono-cyber text-[11px] text-cyan-300">https://api.minhaapp.com/webhooks/devfactory</code>
             </div>
             <Badge className="bg-green-500/10 text-green-400 border-green-500/30 text-[9px] font-mono-cyber">ATIVO</Badge>
           </div>

@@ -27,14 +27,14 @@ const plans: Plan[] = [
     icon: Zap,
     monthly: 47,
     yearly: 470,
-    description: "Para autônomos e pequenos negócios começando com automação.",
+    description: "Para autônomos começando com automação pessoal e IA.",
     color: "cyan",
     features: [
-      "1 número de WhatsApp",
-      "Até 1.000 mensagens/mês",
-      "Atendimento automático básico",
-      "QR Code de conexão",
-      "Suporte por e-mail",
+      "1 dispositivo pareado",
+      "Até 1.000 comandos/mês",
+      "IA Gemini básica",
+      "Interface HUD desktop + web",
+      "Suporte por email",
       "Atualizações mensais",
     ],
   },
@@ -44,17 +44,17 @@ const plans: Plan[] = [
     icon: Crown,
     monthly: 97,
     yearly: 970,
-    description: "Para empresas em crescimento que precisam de escala e IA.",
+    description: "Para profissionais que precisam de escala, voz e multi-device.",
     color: "red",
     highlighted: true,
     badge: "Mais Popular",
     features: [
-      "Até 5 números de WhatsApp",
-      "Mensagens ilimitadas",
-      "IA J.A.R.V.I.S completa",
-      "Comandos por voz",
-      "Integração N8N + Webhooks",
-      "Disparo de campanhas em massa",
+      "Até 5 dispositivos pareados",
+      "Comandos ilimitados",
+      "IA multi-provider (Gemini + GPT-4o + Claude)",
+      "Controle por voz + Whisper offline",
+      "Comandos remotos celular ↔ PC",
+      "Automação de tarefas + scheduler",
       "Telemetria em tempo real",
       "Suporte prioritário 24/7",
     ],
@@ -65,14 +65,14 @@ const plans: Plan[] = [
     icon: Rocket,
     monthly: 297,
     yearly: 2970,
-    description: "Para grandes operações com necessidades customizadas.",
+    description: "Para equipes e operações com necessidades customizadas.",
     color: "purple",
     features: [
-      "Números ilimitados",
+      "Dispositivos ilimitados",
       "Servidor dedicado",
-      "IA customizada com sua marca",
+      "IA local (Ollama) + customizada",
       "API privada & SDK",
-      "Integração com CRM/ERP",
+      "Multi-usuário com permissões",
       "Gerente de conta dedicado",
       "SLA 99.99% garantido",
       "Onboarding & treinamento",
@@ -139,7 +139,7 @@ export function PricingSection() {
             className="font-display font-bold text-3xl sm:text-5xl text-white"
           >
             Escolha seu{" "}
-            <span className="text-cyan-400 text-glow-cyan">protocolo de acesso</span>
+            <span className="text-cyan-400 text-glow-cyan">plano DevFactory</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -154,26 +154,26 @@ export function PricingSection() {
 
           {/* Billing toggle */}
           <div className="mt-8 inline-flex items-center gap-3 p-1 glass-panel clip-cyber-sm">
-            <button
-              onClick={() => setYearly(false)}
-              className={`px-4 py-1.5 text-xs font-mono-cyber uppercase tracking-wider transition-all clip-cyber-sm ${
-                !yearly ? "bg-cyan-500/20 text-cyan-400" : "text-slate-400 hover:text-cyan-400"
-              }`}
-            >
-              Mensal
-            </button>
-            <button
-              onClick={() => setYearly(true)}
-              className={`px-4 py-1.5 text-xs font-mono-cyber uppercase tracking-wider transition-all clip-cyber-sm flex items-center gap-1.5 ${
-                yearly ? "bg-cyan-500/20 text-cyan-400" : "text-slate-400 hover:text-cyan-400"
-              }`}
-            >
-              Anual
-              <span className="px-1.5 py-0.5 bg-green-500/20 text-green-400 text-[9px] rounded">
-                -17%
-              </span>
-            </button>
-          </div>
+          <button
+            onClick={() => setYearly(false)}
+            className={`px-4 py-1.5 text-xs font-mono-cyber uppercase tracking-wider transition-all clip-cyber-sm ${
+              !yearly ? "bg-cyan-500/20 text-cyan-400" : "text-slate-400 hover:text-cyan-400"
+            }`}
+          >
+            Mensal
+          </button>
+          <button
+            onClick={() => setYearly(true)}
+            className={`px-4 py-1.5 text-xs font-mono-cyber uppercase tracking-wider transition-all clip-cyber-sm flex items-center gap-1.5 ${
+              yearly ? "bg-cyan-500/20 text-cyan-400" : "text-slate-400 hover:text-cyan-400"
+            }`}
+          >
+            Anual
+            <span className="px-1.5 py-0.5 bg-green-500/20 text-green-400 text-[9px] rounded">
+              -17%
+            </span>
+          </button>
+        </div>
         </div>
 
         {/* Plans grid */}
