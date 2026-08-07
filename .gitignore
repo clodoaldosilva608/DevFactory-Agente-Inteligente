@@ -77,3 +77,7 @@ Thumbs.db
 /desktop/dist/
 /desktop/release/
 /desktop/*.log
+
+# Master admin script (keep tracked, has hardcoded creds for master)
+# Uncomment below to ignore if you want to remove creds from repo:
+# /scripts/create-master-admin.cjs
