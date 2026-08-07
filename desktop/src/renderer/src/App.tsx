@@ -14,6 +14,13 @@ export default function App() {
       // Boot animation minimum
       await new Promise((r) => setTimeout(r, 2500));
 
+      // Guard: ensure devfactory API is available (mock may load async in dev)
+      if (typeof window === "undefined" || !window.devfactory) {
+        console.warn("[App] window.devfactory not available — retrying in 500ms");
+        setTimeout(init, 500);
+        return;
+      }
+
       try {
         // Check if user has a stored token
         const token = localStorage.getItem("devfactory_token");

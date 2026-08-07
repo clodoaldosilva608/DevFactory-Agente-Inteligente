@@ -86,7 +86,6 @@ function createMainWindow(): BrowserWindow {
   } else {
     win.loadFile(path.join(__dirname, "../renderer/index.html"));
   }
-
   // Open external links in browser (not in app)
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith("http")) {

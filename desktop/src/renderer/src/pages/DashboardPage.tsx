@@ -19,6 +19,7 @@ import {
   Monitor,
   Clock,
   Send,
+  HelpCircle,
 } from "lucide-react";
 
 type Telemetry = {
@@ -217,7 +218,21 @@ export default function DashboardPage() {
             <Clock className="h-3 w-3" />
             <span className="tabular-nums">{clock.toLocaleTimeString("pt-BR", { hour12: false })}</span>
           </div>
-          <div className="flex items-center gap-1 ml-2">
+          <button
+            onClick={() => navigate("/settings")}
+            className="p-1.5 hover:bg-cyan-500/10 transition-colors titlebar-no-drag"
+            title="Configurações"
+          >
+            <SettingsIcon className="h-3.5 w-3.5 text-slate-400 hover:text-cyan-400" />
+          </button>
+          <button
+            onClick={() => navigate("/settings")}
+            className="p-1.5 hover:bg-cyan-500/10 transition-colors titlebar-no-drag"
+            title="Ajuda"
+          >
+            <HelpCircle className="h-3.5 w-3.5 text-slate-400 hover:text-cyan-400" />
+          </button>
+          <div className="flex items-center gap-1 ml-1">
             <button
               onClick={() => window.devfactory.app.minimize()}
               className="p-1.5 hover:bg-cyan-500/10"

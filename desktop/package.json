@@ -3,6 +3,7 @@
   "version": "3.7.2",
   "description": "DevFactory — Agente Inteligente para PC. Desktop app cyberpunk com IA + automação + controle remoto.",
   "main": "dist/main/index.js",
+  "module": "dist/main/index.js",
   "author": {
     "name": "DevFactory",
     "email": "contato@devfactory.app",
@@ -36,6 +37,7 @@
     "electron-log": "^5.2.4",
     "electron-store": "^8.2.0",
     "electron-updater": "^6.3.9",
+    "framer-motion": "^13.0.0",
     "node-machine-id": "^1.1.12",
     "node-os-utils": "^1.3.7",
     "systeminformation": "^5.23.13",

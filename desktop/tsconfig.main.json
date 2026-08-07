@@ -10,7 +10,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "outDir": "dist/main",
+    "outDir": "dist",
     "rootDir": "src",
     "sourceMap": true,
     "declaration": false,
@@ -21,3 +21,4 @@
     "src/preload/**/*"
   ]
 }
+
