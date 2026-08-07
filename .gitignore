@@ -87,3 +87,6 @@ Thumbs.db
 /desktop/devfactory.db-journal
 /desktop/prisma/devfactory.db
 /desktop/prisma/devfactory.db-journal
+
+# User uploads (screenshots, etc.)
+/upload/
