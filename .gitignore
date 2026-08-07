@@ -52,3 +52,22 @@ prompt
 server.log
 # Skills directory
 /skills/
+# Database
+db/*.db
+db/*.db-journal
+
+# Cloned repo (jarvis-ai-assistant reference)
+/jarvis-ai-assistant/
+
+# Z scripts
+/.zscripts/
+
+# OS
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Build artifacts
+*.tsbuildinfo
