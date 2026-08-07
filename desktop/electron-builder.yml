@@ -1,0 +1,104 @@
+appId: app.devfactory.desktop
+productName: DevFactory
+copyright: Copyright © 2026 DevFactory
+artifactName: ${productName}-${version}-${os}-${arch}.${ext}
+
+directories:
+  output: release
+  buildResources: build
+
+files:
+  - dist/**/*
+  - package.json
+  - "!**/node_modules/*/{CHANGELOG.md,README.md,readme.md,readme}"
+  - "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}"
+  - "!**/*.{md,markdown}"
+  - "!**/.{idea,git,cache,vscode,DS_Store}"
+
+extraResources:
+  - from: build/icon.ico
+    to: icon.ico
+  - from: build/icon.icns
+    to: icon.icns
+    filter: ["**/*"]
+
+# Windows
+win:
+  target:
+    - target: nsis
+      arch: [x64, arm64]
+    - target: portable
+      arch: [x64]
+  icon: build/icon.ico
+  publisherName: DevFactory
+  verifyUpdateCodeSignature: false
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: DevFactory
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
+  installerHeaderIcon: build/icon.ico
+  include: build/installer.nsh
+  deleteAppDataOnUninstall: false
+  allowElevation: true
+
+# macOS
+mac:
+  target:
+    - target: dmg
+      arch: [x64, arm64]
+    - target: zip
+      arch: [x64, arm64]
+  icon: build/icon.icns
+  category: public.app-category.productivity
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+
+dmg:
+  title: ${productName} ${version}
+  artifactName: ${productName}-${version}-${arch}.${ext}
+  contents:
+    - x: 130
+      y: 220
+    - x: 410
+      y: 220
+      type: link
+      path: /Applications
+
+# Linux
+linux:
+  target:
+    - target: AppImage
+      arch: [x64, arm64]
+    - target: deb
+      arch: [x64]
+    - target: tar.gz
+      arch: [x64]
+  icon: build/icon.png
+  category: Utility
+  maintainer: DevFactory <contato@devfactory.app>
+  vendor: DevFactory
+  synopsis: Agente Inteligente para PC
+
+appImage:
+  artifactName: ${productName}-${version}-${arch}.AppImage
+
+deb:
+  depends:
+    - libnotify4
+    - libxtst6
+    - libnss3
+
+# Auto-update
+publish:
+  - provider: github
+    owner: clodoaldosilva608
+    repo: DevFactory-Agente-Inteligente
+    releaseType: release

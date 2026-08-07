@@ -71,3 +71,9 @@ Thumbs.db
 
 # Build artifacts
 *.tsbuildinfo
+
+# Desktop app
+/desktop/node_modules/
+/desktop/dist/
+/desktop/release/
+/desktop/*.log

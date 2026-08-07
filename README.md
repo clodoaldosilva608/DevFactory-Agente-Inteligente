@@ -21,13 +21,36 @@ O **DevFactory** é um agente inteligente multi-dispositivo que combina:
 
 ## 🏗️ Arquitetura
 
+### Monorepo
+O projeto é estruturado como monorepo leve com duas aplicações:
+
+```
+DevFactory-Agente-Inteligente/
+├── src/                          # SaaS Web (Next.js 16)
+├── prisma/                       # Schema do banco (compartilhado)
+├── desktop/                      # App Desktop (Electron)
+│   ├── src/
+│   │   ├── main/                 # Electron main process
+│   │   │   ├── index.ts          # BrowserWindow + tray + lifecycle
+│   │   │   └── ipc/              # IPC handlers (system, files, exec, auth, telemetry)
+│   │   ├── preload/              # Secure contextBridge
+│   │   └── renderer/             # React UI (Vite)
+│   │       └── src/
+│   │           ├── pages/        # LoginPage, DashboardPage (HUD cyberpunk)
+│   │           └── components/   # BootScreen
+│   ├── electron-builder.yml      # Config NSIS + DMG + AppImage
+│   └── README.md                 # Docs específicas do desktop
+├── package.json                  # SaaS web deps
+└── README.md
+```
+
 ### Stack Principal
-- **Framework**: Next.js 16 (App Router) + React 19
-- **Linguagem**: TypeScript 5
-- **Styling**: Tailwind CSS 4 + shadcn/ui (New York style)
+- **SaaS Web**: Next.js 16 (App Router) + React 19 + TypeScript 5
+- **Desktop**: Electron 33 + React 19 + Vite 6 + TypeScript 5
+- **Styling**: Tailwind CSS 4 (web) / Tailwind 3 (desktop) + shadcn/ui (web)
 - **Banco de Dados**: Prisma 6 (SQLite dev → Postgres/Supabase prod)
 - **Auth**: NextAuth.js v4 (Email + Google + GitHub + Phone OTP + Magic Link)
-- **Animações**: Framer Motion
+- **Animações**: Framer Motion (web)
 - **Ícones**: Lucide React
 
 ### Estrutura do Projeto
@@ -224,12 +247,19 @@ Todos os planos incluem **7 dias de trial grátis** sem cartão de crédito.
 - [x] Settings com 5 abas (Perfil, Org, API, Segurança, Notificações)
 - [x] Multi-tenant com Organizations + Memberships
 
-### Fase 2 — Desktop Electron (próxima)
-- [ ] App Electron empacotado (.exe/.dmg/.AppImage)
-- [ ] License server (HWID + trial 7 dias)
-- [ ] IPC handlers para system commands
-- [ ] Auto-update channel
+### Fase 2 — Desktop Electron (atual) 🚧
+- [x] App Electron empacotado (.exe/.dmg/.AppImage)
+- [x] IPC handlers para system commands (open app, files, exec, telemetry)
+- [x] Telemetria em tempo real (CPU/RAM/GPU/Temp/Network/Disk)
+- [x] HUD cyberpunk idêntico ao web (radar, logs terminal, command bar)
+- [x] Auth contra SaaS web (login + session)
+- [x] HWID (hardware fingerprint) + trial 7 dias local
+- [x] Boot screen com animação sci-fi
+- [x] Tray icon (minimizar para bandeja)
+- [x] Auto-update via GitHub Releases
+- [ ] License server (validação online anti-pirataria)
 - [ ] Code signing (Windows + macOS)
+- [ ] Comandos por voz (Whisper offline)
 
 ### Fase 3 — IA Real
 - [ ] Adapter multi-provider (Gemini + GPT-4o + Claude + Ollama)
