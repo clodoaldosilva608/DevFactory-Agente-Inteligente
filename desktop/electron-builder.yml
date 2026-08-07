@@ -15,13 +15,6 @@ files:
   - "!**/*.{md,markdown}"
   - "!**/.{idea,git,cache,vscode,DS_Store}"
 
-extraResources:
-  - from: build/icon.ico
-    to: icon.ico
-  - from: build/icon.icns
-    to: icon.icns
-    filter: ["**/*"]
-
 # Windows
 win:
   target:
