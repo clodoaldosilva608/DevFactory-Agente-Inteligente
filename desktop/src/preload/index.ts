@@ -113,14 +113,31 @@ const api = {
 
   // Auth
   auth: {
+    isFirstRun: () => ipcRenderer.invoke("auth:isFirstRun"),
+    setup: (data: { name: string; email: string; password: string }) =>
+      ipcRenderer.invoke("auth:setup", data),
     login: (email: string, password: string) =>
       ipcRenderer.invoke("auth:login", { email, password }),
-    logout: () => ipcRenderer.invoke("auth:logout"),
-    getSession: () => ipcRenderer.invoke("auth:session"),
+    logout: (token?: string) => ipcRenderer.invoke("auth:logout", token),
+    getSession: (token?: string) => ipcRenderer.invoke("auth:session", token),
+    changePassword: (token: string, currentPassword: string, newPassword: string) =>
+      ipcRenderer.invoke("auth:changePassword", { token, currentPassword, newPassword }),
+    updateProfile: (token: string, data: { name?: string; avatarUrl?: string }) =>
+      ipcRenderer.invoke("auth:updateProfile", { token, ...data }),
     getHwid: () => ipcRenderer.invoke("auth:hwid"),
     validateLicense: (key: string) => ipcRenderer.invoke("auth:validateLicense", key),
     startTrial: () => ipcRenderer.invoke("auth:startTrial"),
-    getLicense: () => ipcRenderer.invoke("auth:license"),
+    getLicense: () => ipcRenderer.invoke("auth:getLicense"),
+  },
+
+  // Database (local SQLite)
+  db: {
+    stats: () => ipcRenderer.invoke("db:stats"),
+    export: () => ipcRenderer.invoke("db:export"),
+    wipe: () => ipcRenderer.invoke("db:wipe"),
+    path: () => ipcRenderer.invoke("db:path"),
+    openFolder: () => ipcRenderer.invoke("db:openFolder"),
+    backup: () => ipcRenderer.invoke("db:backup"),
   },
 
   // Telemetry

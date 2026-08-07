@@ -10,11 +10,13 @@ import * as path from "path";
 import Store from "electron-store";
 import log from "electron-log";
 import { autoUpdater } from "electron-updater";
+import { initDb, closeDb } from "./db";
 import { registerSystemHandlers } from "./ipc/system";
 import { registerFileHandlers } from "./ipc/files";
 import { registerExecHandlers } from "./ipc/exec";
 import { registerAuthHandlers } from "./ipc/auth";
 import { registerTelemetryHandlers } from "./ipc/telemetry";
+import { registerDbHandlers } from "./ipc/database";
 
 // ============================================================================
 // Configuration
@@ -226,22 +228,27 @@ if (!gotLock) {
     }
   });
 
-  app.whenReady().then(() => {
+  app.whenReady().then(async () => {
     // Set cyberpunk app user model id (Windows taskbar grouping)
     if (isWin) {
       app.setAppUserModelId("app.devfactory.desktop");
     }
 
+    // Initialize local SQLite database BEFORE registering handlers
+    log.info("[main] initializing local database...");
+    initDb();
+
     mainWindow = createMainWindow();
     tray = createTray();
     setupAutoUpdater();
 
-    // Register IPC handlers
+    // Register IPC handlers (now with DB available)
     registerSystemHandlers(store);
     registerFileHandlers();
     registerExecHandlers();
-    registerAuthHandlers(store);
+    registerAuthHandlers();
     registerTelemetryHandlers();
+    registerDbHandlers();
 
     // Global IPC
     ipcMain.handle("app:version", () => app.getVersion());
@@ -280,8 +287,14 @@ if (!gotLock) {
   });
 }
 
-app.on("before-quit", () => {
+app.on("before-quit", async () => {
   (app as any).isQuitting = true;
+  // Close database gracefully
+  try {
+    await closeDb();
+  } catch (err) {
+    log.warn("[main] db close error:", err);
+  }
 });
 
 app.on("window-all-closed", () => {

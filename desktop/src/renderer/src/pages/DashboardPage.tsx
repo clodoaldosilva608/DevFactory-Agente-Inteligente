@@ -165,7 +165,10 @@ export default function DashboardPage() {
   };
 
   const handleLogout = async () => {
-    await window.devfactory.auth.logout();
+    const token = localStorage.getItem("devfactory_token");
+    await window.devfactory.auth.logout(token || undefined);
+    localStorage.removeItem("devfactory_token");
+    localStorage.removeItem("devfactory_user");
     navigate("/login");
   };
 

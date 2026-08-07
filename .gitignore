@@ -81,3 +81,9 @@ Thumbs.db
 # Master admin script (keep tracked, has hardcoded creds for master)
 # Uncomment below to ignore if you want to remove creds from repo:
 # /scripts/create-master-admin.cjs
+
+# Desktop local DB (never commit user data)
+/desktop/devfactory.db
+/desktop/devfactory.db-journal
+/desktop/prisma/devfactory.db
+/desktop/prisma/devfactory.db-journal
