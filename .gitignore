@@ -90,3 +90,7 @@ Thumbs.db
 
 # User uploads (screenshots, etc.)
 /upload/
+
+# Prisma generated client (desktop)
+/desktop/src/main/db/generated/
+

@@ -11,18 +11,14 @@ files:
   - dist/**/*
   - package.json
   - prisma/schema.prisma
-  - node_modules/.prisma/**
-  - node_modules/@prisma/**
   - "!**/node_modules/*/{CHANGELOG.md,README.md,readme.md,readme}"
   - "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}"
   - "!**/*.{md,markdown}"
   - "!**/.{idea,git,cache,vscode,DS_Store}"
 
-# Prisma needs to be unpacked from asar because it uses native binaries (.node files)
+# Prisma native binaries must be unpacked from asar
 asarUnpack:
-  - node_modules/.prisma/**
-  - node_modules/@prisma/**
-  - node_modules/@prisma/client/**
+  - dist/main/db/generated/**
   - "**/*.{node,dll}"
 
 # Windows

@@ -10,7 +10,7 @@
 import { app } from "electron";
 import path from "path";
 import fs from "fs";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "./generated";
 
 let prisma: PrismaClient | null = null;
 
